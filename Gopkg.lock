@@ -10,8 +10,8 @@
 [[projects]]
   name = "github.com/thedevsaddam/renderer"
   packages = ["."]
-  revision = "c2a450260b484c2f8cdda0aa2904f3b1750afc19"
-  version = "v1.0"
+  revision = "3d25f663ea389cbd315985f1f92d9772aa158381"
+  version = "v1.1"
 
 [[projects]]
   branch = "v2"
@@ -28,6 +28,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d425ed58bd3d91520544cadfbb98e96e66a8ccc6c4b991b05c167b5adf323e7b"
+  inputs-digest = "e6b355d5d1511bc504c1d599ec339f0ae07abbf97196d0de180f4de0fad7b084"
   solver-name = "gps-cdcl"
   solver-version = 1
