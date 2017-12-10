@@ -1,28 +1,26 @@
-# Created by .ignore support plugin (hsz.mobi)
-.idea
-vendor
-*.o
-*.a
-*.so
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# Folders
-_obj
-_test
-bower_components
-node_modules
+# dependencies
+/node_modules
+/bower_components
 
-# Architecture specific extensions/prefixes
-*.[568vq]
-[568vq].out
+# IDEs and editors
+/.idea
+.project
+.classpath
+*.launch
+.settings/
 
-*.cgo1.go
-*.cgo2.c
-_cgo_defun.c
-_cgo_gotypes.go
-_cgo_export.*
 
-_testmain.go
+#System Files
+.DS_Store
+Thumbs.db
 
-*.exe
-*.test
-*.prof
+vendor/*
+!vendor/vendor.json
+
+tmp/*
+gorm.db
+coverage.txt
+
+bak.*
