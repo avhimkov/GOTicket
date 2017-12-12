@@ -10,7 +10,7 @@ import (
 )
 
 type (
-	GOTicketStruct struct {
+	TasksStruct struct {
 		ID          uint64    `form:"id"  json:"id"  bson:"_id"`
 		Name        string    `form:"name" json:"name" bson:"name" valid:"required"`
 		Description string    `form:"description" json:"description" bson:"description"`
@@ -18,7 +18,7 @@ type (
 		Updated     time.Time `form:"-" json:"updated" bson:"updated"`
 		Deleted     bool      `form:"-" json:"deleted" bson:"deleted"`
 	}
-	GOTicketModule struct {
+	TasksModule struct {
 		summer.Module
 	}
 	
@@ -27,29 +27,29 @@ type (
 
 var (
 
-	GOTicket = panel.AddModule(
+	tasks = panel.AddModule(
 		&summer.ModuleSettings{
-			Name:           "GOTicket",
-			Title:          "GOTicket",
+			Name:           "tasks",
+			Title:          "My tasks",
 			MenuOrder:      0,
-			MenuTitle:      "GOTicket",
+			MenuTitle:      "My tasks",
 			Rights:         summer.Rights{Groups: []string{"all"}},
 			
 			Menu:           panel.MainMenu,
 		},
-		&GOTicketModule{},
+		&TasksModule{},
 	)
 
 )
 
 
 // Add new record
-func (m *GOTicketModule) Add(c *gin.Context) {
-	var result GOTicketStruct
+func (m *TasksModule) Add(c *gin.Context) {
+	var result TasksStruct
 	if !summer.PostBind(c, &result) {
 		return
 	}
-	result.ID = panel.AI.Next("GOTicket")
+	result.ID = panel.AI.Next("tasks")
 	result.Created = time.Now()
 	result.Updated = time.Now()
 	result.Name = sanitize.HTML(result.Name)
@@ -63,10 +63,10 @@ func (m *GOTicketModule) Add(c *gin.Context) {
 }
 
 // Edit record
-func (m *GOTicketModule) Edit(c *gin.Context) {
+func (m *TasksModule) Edit(c *gin.Context) {
 	id := types.Uint64(c.PostForm("id"))
-	var result GOTicketStruct
-	var newValue GOTicketStruct
+	var result TasksStruct
+	var newValue TasksStruct
 	if !summer.PostBind(c, &newValue) {
 		return
 	}
@@ -83,9 +83,9 @@ func (m *GOTicketModule) Edit(c *gin.Context) {
 }
 
 // Get record from DB
-func (m *GOTicketModule) Get(c *gin.Context) {
+func (m *TasksModule) Get(c *gin.Context) {
 	id := types.Uint64(c.PostForm("id"))
-	result := GOTicketStruct{}
+	result := TasksStruct{}
 	if err := m.Collection.FindId(id).One(&result); err != nil {
 		c.String(404, "Not found")
 	}
@@ -93,7 +93,7 @@ func (m *GOTicketModule) Get(c *gin.Context) {
 }
 
 // GetAll records
-func (m *GOTicketModule) GetAll(c *gin.Context) { 
+func (m *TasksModule) GetAll(c *gin.Context) { 
 	filter := struct { 
 		Sort    string `form:"sort"  json:"sort"`
 		Search  string `form:"search"  json:"search"`
@@ -101,7 +101,7 @@ func (m *GOTicketModule) GetAll(c *gin.Context) {
 		Deleted bool   `form:"deleted"  json:"deleted"`
 	}{}
 	summer.PostBind(c, &filter)
-	results := []GOTicketStruct{}
+	results := []TasksStruct{}
 	request := obj{"deleted": filter.Deleted }
 
 	sort := "-_id"
@@ -139,7 +139,7 @@ func (m *GOTicketModule) GetAll(c *gin.Context) {
 }
 
 // Action - remove/restore record
-func (m *GOTicketModule) Action(c *gin.Context) {
+func (m *TasksModule) Action(c *gin.Context) {
 	id := types.Uint64(c.PostForm("id"))
 
 	if err := m.Collection.UpdateId(id, obj{"$set": obj{"deleted": c.PostForm("action") == "remove" }}); err != nil {

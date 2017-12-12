@@ -13,7 +13,7 @@ type (
 
 var (
 	panel = summer.Create(summer.Settings{
-		Title:       "GOTicket",
+		Title:       "My project",
 		Port:        8080,
 		DefaultPage: "hello",
 		Path:        "", // application path
