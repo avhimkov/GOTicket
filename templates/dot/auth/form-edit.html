@@ -1,16 +1,14 @@
-
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="{{var "path"}}/pkgFiles/build/login.css">
+    <script type="text/javascript" src="{{var "path"}}/pkgFiles/build/login.js"></script>
+    <script type="text/javascript">$(function () {$('#loginfm').ajaxFormSender({success: function (result) {$(location).attr('href', '?ok');}});});</script>
+</head>
 <form id="edit-form">
-	<div>
-		<label for="name" class="required">Name</label>
-		<input type="text" name="name" id="name" value="{{= it.name}}" />
-	</div>
-	<div>
-		<label for="description">Description</label>
-		<textarea name="description" id="description">{{= it.description}}</textarea>
-	</div>
-	<div class="form-footer required">
-		<input type="hidden" name="id" value="{{= it.id}}" />
-		<button type="submit" name="submit">Save</button>
-	</div>
+    <h1 class="sign-up-title">Add USer</h1>
+    <input type="text" class="sign-up-input" placeholder="Login" required="required" name="admin-z-login">
+    <input type="password" class="sign-up-input" placeholder="Password" required="required" name="admin-z-password">
+    <button type="submit" class="sign-up-button">Log in</button>
 </form>
 
