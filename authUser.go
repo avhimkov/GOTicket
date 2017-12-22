@@ -1,12 +1,14 @@
 package main
 
 import (
-	"github.com/kennygrant/sanitize"
 	"gopkg.in/gin-gonic/gin.v1"
-	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/night-codes/summer.v1"
 	"gopkg.in/night-codes/types.v1"
 	"time"
+	//"strings"
+	"github.com/kennygrant/sanitize"
+	"gopkg.in/mgo.v2/bson"
+	"strings"
 )
 
 type (
@@ -21,11 +23,9 @@ type (
 	AuthModule struct {
 		summer.Module
 	}
-
 )
 
 var (
-
 	auth = panel.AddModule(
 		&summer.ModuleSettings{
 			Name:           "authUser",
@@ -35,17 +35,31 @@ var (
 			MenuTitle:      "Auth in system",
 			Rights:         summer.Rights{Groups: []string{"all"}},
 
-			Menu:           panel.MainMenu,
+			Menu: panel.MainMenu,
 		},
 		&UsersModule{},
 	)
-
 )
 
 //add User
-func AddUser(u *summer.Users, s summer.UsersStruct)  {
-	u.Add(s)
-
+func AddUser(u *summer.Users, c *gin.Context) {
+	login, e1 := c.GetPostForm("admin-z-login")
+	password, e2 := c.GetPostForm("admin-z-password")
+	password2, e3 := c.GetPostForm("admin-z-password-2")
+	if e1 && e2 && e3 {
+		if err := u.Users.Add(summer.UsersStruct{
+			Login:     login,
+			Password:  password,
+			Password2: password2,
+			Name:      strings.Title(login),
+			Root:      true,
+			Rights:    summer.Rights{Groups: []string{"root"}, Actions: []string{"all"}},
+			Settings:  obj{},
+		}); err != nil {
+			c.String(400, err.Error())
+			return
+		}
+	}
 }
 
 // Add new record
@@ -106,7 +120,7 @@ func (m *AuthModule) GetAll(c *gin.Context) {
 	}{}
 	summer.PostBind(c, &filter)
 	results := []AuthStruct{}
-	request := obj{"deleted": filter.Deleted }
+	request := obj{"deleted": filter.Deleted}
 
 	// search engine
 	if len(filter.Search) > 0 {
@@ -132,18 +146,16 @@ func (m *AuthModule) GetAll(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, obj{"data": results, "page": filter.Page, "count": count, "limit": limit })
+	c.JSON(200, obj{"data": results, "page": filter.Page, "count": count, "limit": limit})
 }
 
 // Action - remove/restore record
 func (m *AuthModule) Action(c *gin.Context) {
 	id := types.Uint64(c.PostForm("id"))
 
-	if err := m.Collection.UpdateId(id, obj{"$set": obj{"deleted": c.PostForm("action") == "remove" }}); err != nil {
+	if err := m.Collection.UpdateId(id, obj{"$set": obj{"deleted": c.PostForm("action") == "remove"}}); err != nil {
 		c.String(404, "Not found")
 		return
 	}
 	c.JSON(200, obj{"data": obj{"id": id}})
 }
-
-
