@@ -24,7 +24,6 @@ type (
 
 )
 
-
 var (
 
 	auth = panel.AddModule(
@@ -46,6 +45,7 @@ var (
 //add User
 func AddUser(u *summer.Users, s summer.UsersStruct)  {
 	u.Add(s)
+
 }
 
 // Add new record
