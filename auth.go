@@ -43,6 +43,10 @@ var (
 
 )
 
+//add User
+func AddUser(u *summer.Users, s summer.UsersStruct)  {
+	u.Add(s)
+}
 
 // Add new record
 func (m *AuthModule) Add(c *gin.Context) {
