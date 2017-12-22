@@ -29,7 +29,7 @@ var (
 
 	auth = panel.AddModule(
 		&summer.ModuleSettings{
-			Name:           "auth",
+			Name:           "authUser",
 			CollectionName: "Auth",
 			Title:          "Auth in system",
 			MenuOrder:      0,
@@ -54,7 +54,7 @@ func (m *AuthModule) Add(c *gin.Context) {
 	if !summer.PostBind(c, &result) {
 		return
 	}
-	result.ID = panel.AI.Next("auth")
+	result.ID = panel.AI.Next("authUser")
 	result.Created = time.Now()
 	result.Updated = time.Now()
 	result.Name = sanitize.HTML(result.Name)
