@@ -43,9 +43,9 @@ var (
 
 //add User
 func AddUser(u *summer.Users, c *gin.Context) {
-	login, e1 := c.GetPostForm("admin-z-login")
-	password, e2 := c.GetPostForm("admin-z-password")
-	password2, e3 := c.GetPostForm("admin-z-password-2")
+	login, e1 := c.GetPostForm("user-z-login")
+	password, e2 := c.GetPostForm("user-z-password")
+	password2, e3 := c.GetPostForm("user-z-password-2")
 	if e1 && e2 && e3 {
 		if err := u.Users.Add(summer.UsersStruct{
 			Login:     login,
@@ -53,7 +53,8 @@ func AddUser(u *summer.Users, c *gin.Context) {
 			Password2: password2,
 			Name:      strings.Title(login),
 			Root:      true,
-			Rights:    summer.Rights{Groups: []string{"root"}, Actions: []string{"all"}},
+			//Rights:    summer.Rights{Groups: []string{"root"}, Actions: []string{"all"}},
+			Rights:    summer.Rights{Groups: []string{"user"}, Actions: []string{"all"}},
 			Settings:  obj{},
 		}); err != nil {
 			c.String(400, err.Error())
