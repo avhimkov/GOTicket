@@ -5,7 +5,6 @@ import (
 	"gopkg.in/night-codes/summer.v1"
 	"gopkg.in/night-codes/types.v1"
 	"time"
-	//"strings"
 	"github.com/kennygrant/sanitize"
 	"gopkg.in/mgo.v2/bson"
 	"strings"
@@ -42,12 +41,12 @@ var (
 )
 
 //add User
-func AddUser(u *summer.Users, c *gin.Context) {
+func (m *AuthModule) AddUser(c *gin.Context) {
 	login, e1 := c.GetPostForm("user-z-login")
 	password, e2 := c.GetPostForm("user-z-password")
 	password2, e3 := c.GetPostForm("user-z-password-2")
 	if e1 && e2 && e3 {
-		if err := u.Users.Add(summer.UsersStruct{
+		if err := m.Users.Add(summer.UsersStruct{
 			Login:     login,
 			Password:  password,
 			Password2: password2,
