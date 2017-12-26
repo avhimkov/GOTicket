@@ -61,3 +61,7 @@ touch "$HOMEPATH/.bashrc"
 	echo '# Automatically change to the vagrant dir'
 	echo 'cd /vagrant'
 } >> "$HOMEPATH/.bashrc"
+
+# Add Vendoring in Vagrant
+go get -u github.com/golang/dep/cmd/dep
+dep init
