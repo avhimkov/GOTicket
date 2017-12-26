@@ -63,23 +63,23 @@ func (m *AuthModule) AddUser(c *gin.Context) {
 }
 
 // Add new record
-func (m *AuthModule) Add(c *gin.Context) {
-	var result AuthStruct
-	if !summer.PostBind(c, &result) {
-		return
-	}
-	result.ID = panel.AI.Next("authUser")
-	result.Created = time.Now()
-	result.Updated = time.Now()
-	result.Name = sanitize.HTML(result.Name)
-	result.Description = sanitize.HTML(result.Description)
-
-	if err := m.Collection.Insert(result); err != nil {
-		c.String(400, "DB error")
-		return
-	}
-	c.JSON(200, obj{"data": result})
-}
+//func (m *AuthModule) Add(c *gin.Context) {
+//	var result AuthStruct
+//	if !summer.PostBind(c, &result) {
+//		return
+//	}
+//	result.ID = panel.AI.Next("authUser")
+//	result.Created = time.Now()
+//	result.Updated = time.Now()
+//	result.Name = sanitize.HTML(result.Name)
+//	result.Description = sanitize.HTML(result.Description)
+//
+//	if err := m.Collection.Insert(result); err != nil {
+//		c.String(400, "DB error")
+//		return
+//	}
+//	c.JSON(200, obj{"data": result})
+//}
 
 // Edit record
 func (m *AuthModule) Edit(c *gin.Context) {
