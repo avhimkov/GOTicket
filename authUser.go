@@ -7,7 +7,7 @@ import (
 	"time"
 	"github.com/kennygrant/sanitize"
 	"gopkg.in/mgo.v2/bson"
-	//"strings"
+	"strings"
 )
 
 type (
@@ -40,45 +40,26 @@ var (
 	)
 )
 
-////add User
-//func (m *AuthModule) AddUser(c *gin.Context) {
-//	login, e1 := c.GetPostForm("user-z-login")
-//	password, e2 := c.GetPostForm("user-z-password")
-//	password2, e3 := c.GetPostForm("user-z-password-2")
-//	if e1 && e2 && e3 {
-//		if err := m.Users.Add(summer.UsersStruct{
-//			Login:     login,
-//			Password:  password,
-//			Password2: password2,
-//			Name:      strings.Title(login),
-//			Root:      true,
-//			//Rights:    summer.Rights{Groups: []string{"root"}, Actions: []string{"all"}},
-//			Rights:    summer.Rights{Groups: []string{"user"}, Actions: []string{"all"}},
-//			Settings:  obj{},
-//		}); err != nil {
-//			c.String(400, err.Error())
-//			return
-//		}
-//	}
-//}
-
-// Add new record
-func (m *AuthModule) Add(c *gin.Context) {
-	var result AuthStruct
-	if !summer.PostBind(c, &result) {
-		return
+//add User
+func (m *AuthModule) AddUser(c *gin.Context) {
+	login, e1 := c.GetPostForm("user-z-login")
+	password, e2 := c.GetPostForm("user-z-password")
+	password2, e3 := c.GetPostForm("user-z-password-2")
+	if e1 && e2 && e3 {
+		if err := m.Users.Add(summer.UsersStruct{
+			Login:     login,
+			Password:  password,
+			Password2: password2,
+			Name:      strings.Title(login),
+			Root:      true,
+			//Rights:    summer.Rights{Groups: []string{"root"}, Actions: []string{"all"}},
+			Rights:    summer.Rights{Groups: []string{"user"}, Actions: []string{"all"}},
+			Settings:  obj{},
+		}); err != nil {
+			c.String(400, err.Error())
+			return
+		}
 	}
-	result.ID = panel.AI.Next("authUser")
-	result.Created = time.Now()
-	result.Updated = time.Now()
-	result.Name = sanitize.HTML(result.Name)
-	result.Description = sanitize.HTML(result.Description)
-
-	if err := m.Collection.Insert(result); err != nil {
-		c.String(400, "DB error")
-		return
-	}
-	c.JSON(200, obj{"data": result})
 }
 
 // Edit record
