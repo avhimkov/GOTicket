@@ -17,6 +17,9 @@ func main() {
 	// from the disk again. This makes serving HTML pages very fast.
 	router.LoadHTMLGlob("templates/*")
 
+	// Initialize the routes
+	initializeRoutes()
+
 	// Define the route for the index page and display the index.html template
 	// To start with, we'll use an inline route handler. Later on, we'll create
 	// standalone functions that will be used as route handlers.
