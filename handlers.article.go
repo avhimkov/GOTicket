@@ -10,19 +10,16 @@ import (
 func showIndexPage(c *gin.Context) {
 	articles := getAllArticles()
 
-	// Call the HTML method of the Context to render a template
-	c.HTML(
-		// Set the HTTP status to 200 (OK)
-		http.StatusOK,
-		// Use the index.html template
-		"index.html",
-		// Pass the data that the page uses
-		gin.H{
-			"title":   "Home Page",
-			"payload": articles,
-		},
-	)
+	// Call the render function with the name of the template to render
+	render(c, gin.H{
+		"title":   "Home Page",
+		"payload": articles}, "index.html")
+}
 
+func showArticleCreationPage(c *gin.Context) {
+	// Call the render function with the name of the template to render
+	render(c, gin.H{
+		"title": "Create New Article"}, "create-article.html")
 }
 
 func getArticle(c *gin.Context) {
@@ -30,18 +27,11 @@ func getArticle(c *gin.Context) {
 	if articleID, err := strconv.Atoi(c.Param("article_id")); err == nil {
 		// Check if the article exists
 		if article, err := getArticleByID(articleID); err == nil {
-			// Call the HTML method of the Context to render a template
-			c.HTML(
-				// Set the HTTP status to 200 (OK)
-				http.StatusOK,
-				// Use the index.html template
-				"article.html",
-				// Pass the data that the page uses
-				gin.H{
-					"title":   article.Title,
-					"payload": article,
-				},
-			)
+			// Call the render function with the title, article and the name of the
+			// template
+			render(c, gin.H{
+				"title":   article.Title,
+				"payload": article}, "article.html")
 
 		} else {
 			// If the article is not found, abort with an error
@@ -51,5 +41,21 @@ func getArticle(c *gin.Context) {
 	} else {
 		// If an invalid article ID is specified in the URL, abort with an error
 		c.AbortWithStatus(http.StatusNotFound)
+	}
+}
+
+func createArticle(c *gin.Context) {
+	// Obtain the POSTed title and content values
+	title := c.PostForm("title")
+	content := c.PostForm("content")
+
+	if a, err := createNewArticle(title, content); err == nil {
+		// If the article is created successfully, show success message
+		render(c, gin.H{
+			"title":   "Submission Successful",
+			"payload": a}, "submission-successful.html")
+	} else {
+		// if there was an error while creating the article, abort with an error
+		c.AbortWithStatus(http.StatusBadRequest)
 	}
 }
