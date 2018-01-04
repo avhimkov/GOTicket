@@ -1,4 +1,4 @@
-package summer
+package main
 
 import (
 	"errors"
