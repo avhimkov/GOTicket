@@ -14,63 +14,56 @@ import (
 	"time"
 )
 
-type (
-	UsersStruct struct {
-		ID     uint64 `form:"id" json:"id" bson:"_id"`
-		Login  string `form:"login" json:"login" bson:"login" valid:"required,min(3)"`
-		Name   string `form:"name" json:"name" bson:"name" valid:"max(200)"`
-		Notice string `form:"notice" json:"notice" bson:"notice" valid:"max(1000)"`
-
-		// Is Root-user? Similar as Rights.Groups = ["root"]
-		Root bool `form:"-" json:"-" bson:"root"`
-
-		// Information field, if needs auth by email set Login == Email
-		Email string `form:"email" json:"email" bson:"email" valid:"email"`
-
-		// sha512 hash of password (but from form can be received string password value)
-		Password string `form:"password" json:"-" bson:"password" valid:"min(5)"`
-
-		// from form can be received string password value)
-		Password2 string `form:"password2" json:"-" bson:"password2"`
-
-		// Default user language (Information field)
-		Lang string `form:"lang" json:"lang" bson:"lang" valid:"max(3)"`
-
-		// Times of creating or editing (or loading from mongoDB)
-		Created int64 `form:"-" json:"created" bson:"created"`
-		Updated int64 `form:"-" json:"updated" bson:"updated"`
-		Loaded  int64 `form:"-" json:"-" bson:"-"`
-
-		// Fields for users auth limitation
-		Disabled bool `form:"-" json:"disabled" bson:"disabled"`
-		Deleted  bool `form:"-" json:"deleted" bson:"deleted"`
-
-		// User access rights (summer.Rights)
-		Rights Rights `json:"rights" bson:"rights"`
-
-		// IP control fields (coming soon)
-		LastIP   uint32 `form:"-" json:"lastIP" bson:"lastIP"`
-		IP       uint32 `form:"-" json:"-" bson:"ip"`
-		StringIP string `form:"-" json:"ip" bson:"-"`
-
-		// custom data map
-		Settings map[string]interface{} `form:"-" json:"settings" bson:"settings"`
-
-		// user without authentication
-		Demo bool `form:"-" json:"demo" bson:"-"`
-	}
-	Users struct {
-		rawList    map[string]*bson.Raw    // key - login
-		rawListID  map[uint64]*bson.Raw    // key - id
-		list       map[string]*UsersStruct // key - login
-		listID     map[uint64]*UsersStruct // key - id
-		count      int
-		collection *mgo.Collection
-		sync.Mutex
-		mutUsers sync.Mutex
-		*Panel
-	}
-)
+//type (
+//	UsersStruct struct {
+//		ID     uint64 `form:"id" json:"id" bson:"_id"`
+//		Login  string `form:"login" json:"login" bson:"login" valid:"required,min(3)"`
+//		Name   string `form:"name" json:"name" bson:"name" valid:"max(200)"`
+//		Notice string `form:"notice" json:"notice" bson:"notice" valid:"max(1000)"`
+//
+//		// Is Root-user? Similar as Rights.Groups = ["root"]
+//		Root bool `form:"-" json:"-" bson:"root"`
+//
+//		// Information field, if needs auth by email set Login == Email
+//		Email string `form:"email" json:"email" bson:"email" valid:"email"`
+//
+//		// sha512 hash of password (but from form can be received string password value)
+//		Password string `form:"password" json:"-" bson:"password" valid:"min(5)"`
+//
+//		// from form can be received string password value)
+//		Password2 string `form:"password2" json:"-" bson:"password2"`
+//
+//		// Times of creating or editing (or loading from mongoDB)
+//		Created int64 `form:"-" json:"created" bson:"created"`
+//		Updated int64 `form:"-" json:"updated" bson:"updated"`
+//		Loaded  int64 `form:"-" json:"-" bson:"-"`
+//
+//		// Fields for users auth limitation
+//		Disabled bool `form:"-" json:"disabled" bson:"disabled"`
+//		Deleted  bool `form:"-" json:"deleted" bson:"deleted"`
+//
+//		// IP control fields (coming soon)
+//		LastIP   uint32 `form:"-" json:"lastIP" bson:"lastIP"`
+//		IP       uint32 `form:"-" json:"-" bson:"ip"`
+//		StringIP string `form:"-" json:"ip" bson:"-"`
+//
+//		// custom data map
+//		Settings map[string]interface{} `form:"-" json:"settings" bson:"settings"`
+//
+//		// user without authentication
+//		Demo bool `form:"-" json:"demo" bson:"-"`
+//	}
+//	Users struct {
+//		rawList    map[string]*bson.Raw    // key - login
+//		rawListID  map[uint64]*bson.Raw    // key - id
+//		list       map[string]*UsersStruct // key - login
+//		listID     map[uint64]*UsersStruct // key - id
+//		count      int
+//		collection *mgo.Collection
+//		sync.Mutex
+//		mutUsers sync.Mutex
+//	}
+//)
 
 func UsersFarm(DBName, UsersCollection, AuthSalt string, AICollection ...string) *Users {
 	AIColl := "ai"
