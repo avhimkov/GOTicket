@@ -10,7 +10,7 @@ import (
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"strings"
-	"sync"
+	//"sync"
 	"time"
 )
 
@@ -93,24 +93,24 @@ func UsersFarm(DBName, UsersCollection, AuthSalt string, AICollection ...string)
 	return farm.Users
 }
 
-func (u *Users) init(panel *Panel) {
-	u.Mutex = sync.Mutex{}
-	u.Panel = panel
-	u.collection = mongo.DB(panel.DBName).C(panel.UsersCollection)
-	u.rawList = map[string]*bson.Raw{}
-	u.rawListID = map[uint64]*bson.Raw{}
-	u.list = map[string]*UsersStruct{}
-	u.listID = map[uint64]*UsersStruct{}
-	u.count, _ = u.collection.Count()
-
-	go func() {
-		for range time.Tick(time.Second * 10) {
-			u.count, _ = u.collection.Count()
-			u.loadUsers()
-			u.clearUsers()
-		}
-	}()
-}
+//func (u *Users) init(panel *Panel) {
+//	u.Mutex = sync.Mutex{}
+//	u.Panel = panel
+//	u.collection = mongo.DB(panel.DBName).C(panel.UsersCollection)
+//	u.rawList = map[string]*bson.Raw{}
+//	u.rawListID = map[uint64]*bson.Raw{}
+//	u.list = map[string]*UsersStruct{}
+//	u.listID = map[uint64]*UsersStruct{}
+//	u.count, _ = u.collection.Count()
+//
+//	go func() {
+//		for range time.Tick(time.Second * 10) {
+//			u.count, _ = u.collection.Count()
+//			u.loadUsers()
+//			u.clearUsers()
+//		}
+//	}()
+//}
 
 // Add new user from struct
 func (u *Users) Add(user UsersStruct) error {

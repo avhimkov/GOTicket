@@ -3,8 +3,6 @@ package main
 import (
 	"net/http"
 
-	"github.com/gin-contrib/sessions"
-	"gopkg.in/mgo.v2"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,33 +12,9 @@ func main() {
 	// Set Gin to production mode
 	gin.SetMode(gin.ReleaseMode)
 
-
 	// Set the router as the default one provided by Gin
 	router = gin.Default()
 
-	session, err := mgo.Dial("localhost:27017/test")
-	if err != nil {
-		// handle err
-	}
-
-	c := session.DB("test").C("sessions")
-	store := sessions.NewMongoStore(c, 3600, true, []byte("secret"))
-	router.Use(sessions.Sessions("mysession", store))
-
-	router.GET("/incr", func(c *gin.Context) {
-		session := sessions.Default(c)
-		var count int
-		v := session.Get("count")
-		if v == nil {
-			count = 0
-		} else {
-			count = v.(int)
-			count++
-		}
-		session.Set("count", count)
-		session.Save()
-		c.JSON(200, gin.H{"count": count})
-	})
 	// Process the templates at the start so that they don't have to be loaded
 	// from the disk again. This makes serving HTML pages very fast.
 	router.LoadHTMLGlob("templates/*")

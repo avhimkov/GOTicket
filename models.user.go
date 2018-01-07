@@ -3,12 +3,13 @@ package main
 import (
 	"errors"
 	"strings"
+	"sync"
+	"time"
 
+	//"github.com/gin-contrib/sessions"
+	"github.com/night-codes/mgo-wrapper"
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2"
-	"sync"
-	"github.com/night-codes/mgo-wrapper"
-	"time"
 )
 
 
@@ -63,7 +64,36 @@ type (
 	}
 )
 
+
+
 func (u *Users) init() {
+
+	//INIT MongoDB
+
+	//session, err := mgo.Dial("localhost:27017/test")
+	//if err != nil {
+	//// handle err
+	//}
+	//
+	//c := session.DB("test").C("sessions")
+	//store := sessions.NewMongoStore(c, 3600, true, []byte("secret"))
+	//router.Use(sessions.Sessions("mysession", store))
+	//
+	//router.GET("/incr", func(c *gin.Context) {
+	//	session := sessions.Default(c)
+	//	var count int
+	//	v := session.Get("count")
+	//	if v == nil {
+	//		count = 0
+	//	} else {
+	//		count = v.(int)
+	//		count++
+	//	}
+	//	session.Set("count", count)
+	//	session.Save()
+	//	c.JSON(200, gin.H{"count": count})
+	//})
+
 	u.Mutex = sync.Mutex{}
 	u.collection = mongo.DB("Users").C("UsersCollection"/*Edit*/)
 	u.rawList = map[string]*bson.Raw{}
@@ -99,7 +129,7 @@ func (u *Users) init() {
 //}
 
 // Check if the username and password combination is valid
-func (u *UsersStruct)isUserValid(username, password string) bool {
+func (u *UsersStruct) isUserValid(username, password string) bool {
 	for _, u := range u.listID {
 		if u.Username == username && u.Password == password {
 			return true
