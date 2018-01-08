@@ -24,6 +24,23 @@ type Users struct {
 	mutUsers   sync.Mutex
 }
 
+
+//func (u *Users) Validate(user *UsersStruct) error {
+//	if _, err := govalidator.ValidateStruct(user); err != nil {
+//		ers := []string{}
+//		for k, v := range govalidator.ErrorsByField(err) {
+//			ers = append(ers, k+": "+v)
+//		}
+//		return errors.New(strings.Join(ers, " \n"))
+//	}
+//	if user.Password != user.Password2 {
+//		return errors.New("Password mismatch!")
+//	}
+//	user.Password2 = ""
+//	return nil
+//}
+
+
 //For this demo, we're storing the user list in memory
 //We also have some users predefined.
 //In a real application, this list will most likely be fetched
