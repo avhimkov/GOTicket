@@ -6,8 +6,6 @@ import (
 	"gopkg.in/mgo.v2/bson"
 	"gopkg.in/mgo.v2"
 	"sync"
-
-	"github.com/night-codes/govalidator"
 )
 
 type user struct {
@@ -38,26 +36,8 @@ var userList = []user{
 	user{Username: "user3", Password: "pass3"},
 }
 
-//func (u *Users) Validate(user *UsersStruct) error {
-//	if _, err := govalidator.ValidateStruct(user); err != nil {
-//		ers := []string{}
-//		for k, v := range govalidator.ErrorsByField(err) {
-//			ers = append(ers, k+": "+v)
-//		}
-//		return errors.New(strings.Join(ers, " \n"))
-//	}
-//	if user.Password != user.Password2 {
-//		return errors.New("Password mismatch!")
-//	}
-//	user.Password2 = ""
-//	return nil
-//}
-
 // Check if the username and password combination is valid
 func (user *Users) isUserValid(username, password string) bool {
-
-	//user.collection = mongo.DB("").C("sessions")
-
 	for _, u := range userList {
 		if u.Username == username && u.Password == password {
 			return true
